@@ -7,7 +7,5 @@ export type ProductsTableProps = {
   totalProducts: number;
   page: number;
   handleChangePage: (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => void;
-  selectProduct: (e: Product) => void;
-  showProduct: (e: boolean) => void;
   loading: boolean;
 };

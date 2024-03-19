@@ -6,17 +6,10 @@ import ProductsTable from "../components/ProductsTable"
 import ErrorMessage from "../components/ErrorMessage"
 import ProductDetails from "../components/ProductDetails"
 import { useNavigate, useLocation } from 'react-router-dom';
+import { SelectedProductProvider } from '../context/SelectedProductContext';
 
 const ROWS_PER_PAGE: number = 5
 const TOTAL_PRODUCTS: number = 12
-
-const NO_PRODUCT: Product = {
-    id: 0,
-    name: '',
-    year: 0,
-    color: '',
-    pantone_value: ''
-}
 
 const Home = () => {
     const navigate = useNavigate();
@@ -30,8 +23,6 @@ const Home = () => {
     const [loading, setLoading] = useState<boolean>(false)
     const [page, setPage] = useState<number>(parseInt(pageParam)-1 || 0)
     const [error, setError] = useState<{code: number, message: string} | null>(null)
-    const [selectedProduct, setSelectedProduct] = useState<Product>(NO_PRODUCT)
-    const [openModal, setOpenModal] = useState<boolean>(false)
 
     const handleChooseID = (e: ChangeEvent<HTMLInputElement>) => {
         const prodID = Number(e.target.value)
@@ -40,10 +31,6 @@ const Home = () => {
         prodID
         ? navigate(`?page=${page+1}&id=${prodID}`)
         : navigate(`?page=${page+1}`)
-    }
-
-    const handleClose = () => {
-        setOpenModal(false)
     }
 
     const fetchProducts = async () => {
@@ -67,7 +54,6 @@ const Home = () => {
             } else {
                 setError({code: 500, message: 'Unknown error'})
             }
-            throw error;
         }
         setLoading(false)
     }
@@ -97,20 +83,17 @@ const Home = () => {
         
         {!error &&  productsList &&
         <>
-            <ProductsTable 
-                productsList={productsList} 
-                rowsPerPage={ROWS_PER_PAGE} 
-                totalProducts={TOTAL_PRODUCTS} 
-                page={page} 
-                handleChangePage={handleChangePage}
-                selectProduct={setSelectedProduct}
-                showProduct={setOpenModal} 
-                loading={loading}/>
+            <SelectedProductProvider>
+                <ProductsTable 
+                    productsList={productsList} 
+                    rowsPerPage={ROWS_PER_PAGE} 
+                    totalProducts={TOTAL_PRODUCTS} 
+                    page={page} 
+                    handleChangePage={handleChangePage}
+                    loading={loading}/>
 
-            <ProductDetails 
-                openModal={openModal} 
-                handleClose={handleClose} 
-                selectedProduct={selectedProduct} />
+                <ProductDetails />
+            </SelectedProductProvider>
         </>
         }
 

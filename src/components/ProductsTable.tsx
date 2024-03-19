@@ -2,12 +2,15 @@ import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody
 import { Product } from "../utils/productType"
 import { FC } from "react";
 import { ProductsTableProps } from "../utils/productsTablePropsType"
+import { useSelectedProductContext } from '../context/SelectedProductContext';
 
-const ProductsTable: FC<ProductsTableProps> = ({productsList, rowsPerPage, totalProducts, page, handleChangePage, selectProduct, showProduct, loading}) => {
+const ProductsTable: FC<ProductsTableProps> = ({productsList, rowsPerPage, totalProducts, page, handleChangePage, loading}) => {
+
+    const { setSelectedProduct, setOpenModal } = useSelectedProductContext();
 
     const handleClick = (product: Product) => {
-        selectProduct(product)
-        showProduct(true)
+        setSelectedProduct(product)
+        setOpenModal(true)
     }
 
   return (

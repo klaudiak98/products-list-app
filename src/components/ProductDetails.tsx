@@ -1,9 +1,10 @@
 import { Modal, Box, Typography, IconButton } from "@mui/material"
-import { FC } from "react";
-import { ProductDetailsProps } from "../utils/productDetailsPropsType";
 import CloseIcon from '@mui/icons-material/Close';
+import { useSelectedProductContext } from '../context/SelectedProductContext';
 
-const ProductDetails: FC<ProductDetailsProps> = ({openModal, handleClose, selectedProduct}) => {
+const ProductDetails = () => {
+  const { selectedProduct, openModal, handleClose } = useSelectedProductContext();
+
   return (
     <Modal 
       open={openModal} 
