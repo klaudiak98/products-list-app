@@ -1,7 +1,7 @@
-import { TextField, Typography, Box, CircularProgress } from "@mui/material"
-import { ChangeEvent, useEffect, useState } from "react"
+import { TextField, Typography } from "@mui/material"
+import { ChangeEvent, MouseEvent, useEffect, useState } from "react"
 import axios from "axios"
-import { Product } from "../types/productType"
+import { Product } from "../utils/productType"
 import ProductsTable from "../components/ProductsTable"
 import ErrorMessage from "../components/ErrorMessage"
 import ProductDetails from "../components/ProductDetails"
@@ -9,6 +9,14 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 const ROWS_PER_PAGE: number = 5
 const TOTAL_PRODUCTS: number = 12
+
+const NO_PRODUCT: Product = {
+    id: 0,
+    name: '',
+    year: 0,
+    color: '',
+    pantone_value: ''
+}
 
 const Home = () => {
     const navigate = useNavigate();
@@ -22,14 +30,14 @@ const Home = () => {
     const [loading, setLoading] = useState<boolean>(false)
     const [page, setPage] = useState<number>(parseInt(pageParam)-1 || 0)
     const [error, setError] = useState<{code: number, message: string} | null>(null)
-    const [selectedProduct, setSelectedProduct] = useState<Product>({})
+    const [selectedProduct, setSelectedProduct] = useState<Product>(NO_PRODUCT)
     const [openModal, setOpenModal] = useState<boolean>(false)
 
     const handleChooseID = (e: ChangeEvent<HTMLInputElement>) => {
-        const prodID = e.target.value
+        const prodID = Number(e.target.value)
         setProductID(prodID)
 
-        prodID.length
+        prodID
         ? navigate(`?page=${page+1}&id=${prodID}`)
         : navigate(`?page=${page+1}`)
     }
@@ -49,7 +57,7 @@ const Home = () => {
             }
             setError(null)
         } catch (err) {
-            if (err.respons?.data.massage) {
+            if (err.response?.data.message) {
                 setError({code: err.response.status, message: err.response.data.message})
             } else if (err.response.status === 404) {
                 setError({code: err.response.status, message: 'Product not found. Please change parameters.'})
@@ -60,7 +68,7 @@ const Home = () => {
         setLoading(false)
     }
 
-    const handleChangePage = (_e: unknown, newPage: number) => {
+    const handleChangePage = (_e: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         setPage(newPage)
         
         productID
@@ -79,8 +87,9 @@ const Home = () => {
         <TextField 
             type='number' 
             label='Choose ID' 
-            value={productID} 
-            onChange={handleChooseID} />
+            value={productID || ''} 
+            onChange={handleChooseID} 
+            inputProps={{min: 1}}/>
         
         {!error &&  productsList &&
         <>

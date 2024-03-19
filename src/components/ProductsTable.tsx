@@ -1,17 +1,7 @@
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, TableFooter, TablePagination, CircularProgress, Box } from "@mui/material"
-import { Product } from "../types/productType"
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, TableFooter, TablePagination, CircularProgress, Box, alpha } from "@mui/material"
+import { Product } from "../utils/productType"
 import { FC } from "react";
-
-type ProductsTableProps = {
-    productsList: Product[];
-    rowsPerPage: number;
-    totalProducts: number;
-    page: number;
-    handleChangePage: (event: unknown, newPage: number) => void;
-    selectProduct: (e: unknown) => void;
-    showProduct: (e:unknown) => void;
-    loading: boolean
-}
+import { ProductsTableProps } from "../utils/productsTablePropsType"
 
 const ProductsTable: FC<ProductsTableProps> = ({productsList, rowsPerPage, totalProducts, page, handleChangePage, selectProduct, showProduct, loading}) => {
 
@@ -41,22 +31,41 @@ const ProductsTable: FC<ProductsTableProps> = ({productsList, rowsPerPage, total
                     </TableRow>
                 }
                 { productsList.map((product: Product) => (
-                    <TableRow key={product.id} sx={{ bgcolor: product.color }} onClick={() => handleClick(product)}>
+                    <TableRow 
+                        key={product.id} 
+                        sx={{ 
+                            bgcolor: product.color,
+                            '&:hover': {
+                                bgcolor: alpha(product.color, 0.8),
+                                cursor: 'pointer'
+                            }
+                        }} 
+                        onClick={() => handleClick(product)}>
                         <TableCell component="th" scope="row">{product.id}</TableCell>
                         <TableCell>{product.name}</TableCell>
                         <TableCell>{product.year}</TableCell>
                     </TableRow>
                 ))}
             </TableBody>
-            <TableFooter>
+           <TableFooter>
                 <TableRow>
-                    <TablePagination
-                        rowsPerPageOptions={[rowsPerPage]}
-                        count={totalProducts}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        />
+                    { productsList.length > 1 ? 
+                        <TablePagination
+                            rowsPerPageOptions={[rowsPerPage]}
+                            count={totalProducts}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            />
+                        : 
+                        <TablePagination
+                            rowsPerPageOptions={[1]}
+                            count={1}
+                            rowsPerPage={1}
+                            page={0}
+                            onPageChange={handleChangePage}
+                            />
+                    }
                 </TableRow>
             </TableFooter>
         </Table>

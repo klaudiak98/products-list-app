@@ -1,12 +1,7 @@
-import { Modal, Box, Typography } from "@mui/material"
-import { Product } from "../types/productType";
+import { Modal, Box, Typography, IconButton } from "@mui/material"
 import { FC } from "react";
-
-type ProductDetailsProps = {
-    openModal: (e:unknown) => void;
-    handleClose: (e:unknown) => void;
-    selectedProduct: Product
-}
+import { ProductDetailsProps } from "../utils/productDetailsPropsType";
+import CloseIcon from '@mui/icons-material/Close';
 
 const ProductDetails: FC<ProductDetailsProps> = ({openModal, handleClose, selectedProduct}) => {
   return (
@@ -22,9 +17,13 @@ const ProductDetails: FC<ProductDetailsProps> = ({openModal, handleClose, select
             flexDirection: 'column', 
             justifyContent: 'center', 
             alignItems: 'center', 
-            borderRadius: 1
+            borderRadius: 1,
+            position: 'relative'
           }} 
           bgcolor={selectedProduct.color}>
+            <IconButton sx={{ position: 'absolute', top: 5, right: 5 }} onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
             <Typography variant="h3">{selectedProduct.name}</Typography>
             <Typography variant="h4">{selectedProduct.year}</Typography>
             <Typography variant="h4">{selectedProduct.color}</Typography>

@@ -1,10 +1,6 @@
 import { FC } from "react"
 import { Box, Typography } from "@mui/material"
-
-type ErrorMessageProps = {
-  code: number,
-  message: string
-}
+import { ErrorMessageProps } from "../utils/errorMessagePropsType"
 
 const ErrorMessage: FC<ErrorMessageProps> = ({ code, message }) => {
   return (
