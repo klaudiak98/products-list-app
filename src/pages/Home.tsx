@@ -75,20 +75,14 @@ const Home = () => {
 
   return (
     <>
-        <Typography variant='h1' color='primary.main'>Products List</Typography>
+        <Typography variant='h1' color='primary.main' pt='1em'>Products List</Typography>
         <TextField 
             type='number' 
             label='Choose ID' 
             value={productID} 
             onChange={handleChooseID} />
         
-        {loading &&
-            <Box sx={{width: '100vw', height: 300, alignSelf:'center', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                <CircularProgress size="70px"/>
-            </Box>
-        }
-
-        {!error && !loading && productsList &&
+        {!error &&  productsList &&
         <>
             <ProductsTable 
                 productsList={productsList} 
@@ -97,7 +91,8 @@ const Home = () => {
                 page={page} 
                 handleChangePage={handleChangePage}
                 selectProduct={setSelectedProduct}
-                showProduct={setOpenModal} />
+                showProduct={setOpenModal} 
+                loading={loading}/>
 
             <ProductDetails 
                 openModal={openModal} 
