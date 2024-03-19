@@ -21,7 +21,7 @@ const ProductsTable: FC<ProductsTableProps> = ({productsList, rowsPerPage, total
     }
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{ '@media (max-width: 720px)' : { maxWidth: '80%'}}}>
         <Table>
             <TableHead>
                 <TableRow>

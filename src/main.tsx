@@ -16,11 +16,17 @@ const theme = createTheme({
   typography: {
     h1: {
       fontSize: "4rem",
-      fontWeight: 600
+      fontWeight: 600,
+      '@media (max-width: 768px)': {
+        fontSize: "3rem"
+      }
     },
     h2: {
       fontSize: "3.5rem",
-      fontWeight: 500
+      fontWeight: 500,
+      '@media (max-width: 768px)': {
+        fontSize: "2rem"
+      }
     },
     h3: {
       fontSize: "1.75rem"
