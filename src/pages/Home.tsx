@@ -1,14 +1,8 @@
-import { TextField, Typography, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, TableFooter, TablePagination } from "@mui/material"
+import { TextField, Typography } from "@mui/material"
 import { ChangeEvent, useEffect, useState } from "react"
 import axios from "axios"
-
-type Product = {
-    id: number,
-    name: string,
-    year: number,
-    color: string,
-    pantone_value: string
-}
+import { Product } from "../types/productType"
+import ProductsTable from "../components/ProductsTable"
 
 const ROWS_PER_PAGE: number = 5
 const TOTAL_PRODUCTS: number = 12
@@ -48,37 +42,12 @@ const Home = () => {
             value={productID} 
             onChange={handleChooseID} />
         
-        <TableContainer component={Paper}>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Product ID</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Year</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {productsList.map((product: Product) => (
-                        <TableRow key={product.id} sx={{ bgcolor: product.color }}>
-                            <TableCell component="th" scope="row">{product.id}</TableCell>
-                            <TableCell>{product.name}</TableCell>
-                            <TableCell>{product.year}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-                <TableFooter>
-                    <TableRow>
-                        <TablePagination
-                            rowsPerPageOptions={[ROWS_PER_PAGE]}
-                            count={TOTAL_PRODUCTS}
-                            rowsPerPage={ROWS_PER_PAGE}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            />
-                    </TableRow>
-                </TableFooter>
-            </Table>
-        </TableContainer>
+        <ProductsTable 
+            productsList={productsList} 
+            rowsPerPage={ROWS_PER_PAGE} 
+            totalProducts={TOTAL_PRODUCTS} 
+            page={page} 
+            handleChangePage={handleChangePage} />
     </>
   )
 }
