@@ -5,18 +5,22 @@ import { Product } from "../types/productType"
 import ProductsTable from "../components/ProductsTable"
 import ErrorMessage from "../components/ErrorMessage"
 import ProductDetails from "../components/ProductDetails"
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const ROWS_PER_PAGE: number = 5
 const TOTAL_PRODUCTS: number = 12
 
 const Home = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const searchParams =  new URLSearchParams(location.search)
+    const pageParam: string = searchParams.get('page') || ''
+    const idParam: string = searchParams.get('id') || ''
 
-    const [productID, setProductID] = useState<number>(0)
+    const [productID, setProductID] = useState<number>(parseInt(idParam) || 0)
     const [productsList, setProductsList] = useState<Product[]>([])
     const [loading, setLoading] = useState<boolean>(false)
-    const [page, setPage] = useState<number>(0)
+    const [page, setPage] = useState<number>(parseInt(pageParam)-1 || 0)
     const [error, setError] = useState<{code: number, message: string} | null>(null)
     const [selectedProduct, setSelectedProduct] = useState<Product>({})
     const [openModal, setOpenModal] = useState<boolean>(false)
