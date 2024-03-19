@@ -1,11 +1,18 @@
-import { Typography, Container } from '@mui/material'
+import { Container } from '@mui/material'
 import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import Home from './pages/Home'
 
 function App() {
 
   return (
     <Container sx={{ height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-      <Typography variant='h1' color='primary.main'>Hello World</Typography>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home/>} />
+          <Route path="*" element={<Navigate to='/'/>} />
+        </Routes>
+      </BrowserRouter>
     </Container>
   )
 }
