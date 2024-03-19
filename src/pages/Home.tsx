@@ -1,4 +1,4 @@
-import { TextField, Typography, Modal, Box } from "@mui/material"
+import { TextField, Typography, Box, CircularProgress } from "@mui/material"
 import { ChangeEvent, useEffect, useState } from "react"
 import axios from "axios"
 import { Product } from "../types/productType"
@@ -12,11 +12,12 @@ const TOTAL_PRODUCTS: number = 12
 const Home = () => {
     const [productID, setProductID] = useState<number>(0)
     const [productsList, setProductsList] = useState<Product[]>([])
+    const [loading, setLoading] = useState<boolean>(false)
     const [page, setPage] = useState<number>(0)
     const [error, setError] = useState<{code: number, message: string} | null>(null)
     const [selectedProduct, setSelectedProduct] = useState<Product>({})
     const [openModal, setOpenModal] = useState<boolean>(false)
-    
+
     const handleChooseID = (e: ChangeEvent<HTMLInputElement>) => {
         setProductID(e.target.value)
     }
@@ -44,6 +45,7 @@ const Home = () => {
                 setError({code: err.response.status, message: 'Try again later'})
             }
         }
+        setLoading(false)
     }
 
     const handleChangePage = (_e: unknown, newPage: number) => {
@@ -51,6 +53,7 @@ const Home = () => {
     }
 
     useEffect(() => {
+        setLoading(true)
         fetchProducts()
     },[page, productID])
 
@@ -63,7 +66,13 @@ const Home = () => {
             value={productID} 
             onChange={handleChooseID} />
         
-        {!error && productsList &&
+        {loading &&
+            <Box sx={{width: '100vw', height: 300, alignSelf:'center', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <CircularProgress size="70px"/>
+            </Box>
+        }
+
+        {!error && !loading && productsList &&
         <>
             <ProductsTable 
                 productsList={productsList} 
