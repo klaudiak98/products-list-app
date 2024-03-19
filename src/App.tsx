@@ -6,7 +6,14 @@ import Home from './pages/Home'
 function App() {
 
   return (
-    <Container sx={{ height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+    <Container 
+      sx={{ 
+        height: '100vh', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center', 
+        gap: 3
+      }}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home/>} />
