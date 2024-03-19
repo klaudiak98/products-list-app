@@ -3,10 +3,11 @@ import { Product } from "../utils/productType"
 import { FC } from "react";
 import { ProductsTableProps } from "../utils/productsTablePropsType"
 import { useSelectedProductContext } from '../context/SelectedProductContext';
+import { SelectedProductContextType } from "../utils/selectedProductContextType";
 
 const ProductsTable: FC<ProductsTableProps> = ({productsList, rowsPerPage, totalProducts, page, handleChangePage, loading}) => {
 
-    const { setSelectedProduct, setOpenModal } = useSelectedProductContext();
+    const { setSelectedProduct, setOpenModal } = useSelectedProductContext() as SelectedProductContextType;
 
     const handleClick = (product: Product) => {
         setSelectedProduct(product)

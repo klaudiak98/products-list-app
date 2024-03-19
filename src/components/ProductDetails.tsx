@@ -1,9 +1,10 @@
 import { Modal, Box, Typography, IconButton } from "@mui/material"
 import CloseIcon from '@mui/icons-material/Close';
 import { useSelectedProductContext } from '../context/SelectedProductContext';
+import { SelectedProductContextType } from "../utils/selectedProductContextType";
 
 const ProductDetails = () => {
-  const { selectedProduct, openModal, handleClose } = useSelectedProductContext();
+  const { selectedProduct, openModal, handleClose } = useSelectedProductContext() as SelectedProductContextType;
 
   return (
     <Modal 
