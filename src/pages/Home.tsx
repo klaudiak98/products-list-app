@@ -5,11 +5,14 @@ import { Product } from "../types/productType"
 import ProductsTable from "../components/ProductsTable"
 import ErrorMessage from "../components/ErrorMessage"
 import ProductDetails from "../components/ProductDetails"
+import { useNavigate } from 'react-router-dom';
 
 const ROWS_PER_PAGE: number = 5
 const TOTAL_PRODUCTS: number = 12
 
 const Home = () => {
+    const navigate = useNavigate();
+
     const [productID, setProductID] = useState<number>(0)
     const [productsList, setProductsList] = useState<Product[]>([])
     const [loading, setLoading] = useState<boolean>(false)
@@ -19,7 +22,12 @@ const Home = () => {
     const [openModal, setOpenModal] = useState<boolean>(false)
 
     const handleChooseID = (e: ChangeEvent<HTMLInputElement>) => {
-        setProductID(e.target.value)
+        const prodID = e.target.value
+        setProductID(prodID)
+
+        prodID.length
+        ? navigate(`?page=${page+1}&id=${prodID}`)
+        : navigate(`?page=${page+1}`)
     }
 
     const handleClose = () => {
@@ -50,6 +58,10 @@ const Home = () => {
 
     const handleChangePage = (_e: unknown, newPage: number) => {
         setPage(newPage)
+        
+        productID
+        ? navigate (`?page=${newPage+1}&id=${productID}`)
+        : navigate (`?page=${newPage+1}`)
     }
 
     useEffect(() => {
