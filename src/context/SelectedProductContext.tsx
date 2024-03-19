@@ -1,9 +1,5 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 import { Product } from "../utils/productType";
-
-const SelectedProductContext = createContext();
-
-export const useSelectedProductContext = () => useContext(SelectedProductContext);
 
 const NO_PRODUCT: Product = {
     id: 0,
@@ -13,7 +9,23 @@ const NO_PRODUCT: Product = {
     pantone_value: ''
 }
 
-export const SelectedProductProvider = ({ children }) => {
+const SelectedProductContext = createContext<{
+    selectedProduct: Product;
+    openModal: boolean;
+    setSelectedProduct: (product: Product) => void;
+    setOpenModal: (isOpen: boolean) => void;
+    handleClose: () => void;
+}>({
+    selectedProduct: NO_PRODUCT,
+    openModal: false,
+    setSelectedProduct: () => {},
+    setOpenModal: () => {},
+    handleClose: () => {}
+});
+
+export const useSelectedProductContext = () => useContext(SelectedProductContext);
+
+export const SelectedProductProvider = ({ children }: { children: ReactNode }) => {
     const [selectedProduct, setSelectedProduct] = useState<Product>(NO_PRODUCT)
     const [openModal, setOpenModal] = useState<boolean>(false)
 

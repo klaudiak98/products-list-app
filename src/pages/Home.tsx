@@ -47,9 +47,9 @@ const Home = () => {
             if (axios.isAxiosError(error)) {
                 const axiosError: AxiosError = error;
                 if (axiosError.response?.status === 404) {
-                    setError({ code: axiosError.response?.status, message: axiosError.response.data.message || 'Not Found. Please change your parameters.' })
-                } else {
-                    setError({ code: axiosError.response?.status, message: axiosError.response.data.message || axiosError.message })
+                    setError({ code: axiosError.response?.status, message: 'Not Found. Please change your parameters.' })
+                } else if (axiosError.response?.status === 500) {
+                    setError({ code: axiosError.response?.status, message: 'Internal Server Error' })
                 }
             } else {
                 setError({code: 500, message: 'Unknown error'})
