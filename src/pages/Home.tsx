@@ -1,8 +1,10 @@
-import { TextField, Typography } from "@mui/material"
+import { TextField, Typography, Modal, Box } from "@mui/material"
 import { ChangeEvent, useEffect, useState } from "react"
 import axios from "axios"
 import { Product } from "../types/productType"
 import ProductsTable from "../components/ProductsTable"
+import ErrorMessage from "../components/ErrorMessage"
+import ProductDetails from "../components/ProductDetails"
 
 const ROWS_PER_PAGE: number = 5
 const TOTAL_PRODUCTS: number = 12
@@ -11,17 +13,36 @@ const Home = () => {
     const [productID, setProductID] = useState<number>(0)
     const [productsList, setProductsList] = useState<Product[]>([])
     const [page, setPage] = useState<number>(0)
+    const [error, setError] = useState<{code: number, message: string} | null>(null)
+    const [selectedProduct, setSelectedProduct] = useState<Product>({})
+    const [openModal, setOpenModal] = useState<boolean>(false)
     
     const handleChooseID = (e: ChangeEvent<HTMLInputElement>) => {
         setProductID(e.target.value)
     }
 
+    const handleClose = () => {
+        setOpenModal(false)
+    }
+
     const fetchProducts = async () => {
         try {
-            const response = await axios.get(`https://reqres.in/api/products?per_page=${ROWS_PER_PAGE}}&page=${page+1}`)
-            setProductsList(response.data.data)
+            if (productID) {
+                const response = await axios.get(`https://reqres.in/api/products?id=${productID}`)
+                setProductsList([response.data.data])
+            } else {
+                const response = await axios.get(`https://reqres.in/api/products?per_page=${ROWS_PER_PAGE}}&page=${page+1}`)
+                setProductsList(response.data.data)
+            }
+            setError(null)
         } catch (err) {
-            console.error(err)
+            if (err.respons?.data.massage) {
+                setError({code: err.response.status, message: err.response.data.message})
+            } else if (err.response.status === 404) {
+                setError({code: err.response.status, message: 'Product not found. Please change parameters.'})
+            } else {
+                setError({code: err.response.status, message: 'Try again later'})
+            }
         }
     }
 
@@ -31,7 +52,7 @@ const Home = () => {
 
     useEffect(() => {
         fetchProducts()
-    },[page])
+    },[page, productID])
 
   return (
     <>
@@ -42,12 +63,25 @@ const Home = () => {
             value={productID} 
             onChange={handleChooseID} />
         
-        <ProductsTable 
-            productsList={productsList} 
-            rowsPerPage={ROWS_PER_PAGE} 
-            totalProducts={TOTAL_PRODUCTS} 
-            page={page} 
-            handleChangePage={handleChangePage} />
+        {!error && productsList &&
+        <>
+            <ProductsTable 
+                productsList={productsList} 
+                rowsPerPage={ROWS_PER_PAGE} 
+                totalProducts={TOTAL_PRODUCTS} 
+                page={page} 
+                handleChangePage={handleChangePage}
+                selectProduct={setSelectedProduct}
+                showProduct={setOpenModal} />
+
+            <ProductDetails 
+                openModal={openModal} 
+                handleClose={handleClose} 
+                selectedProduct={selectedProduct} />
+        </>
+        }
+
+        {error && <ErrorMessage code={error.code} message={error.message}/>}
     </>
   )
 }

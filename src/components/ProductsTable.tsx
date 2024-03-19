@@ -1,6 +1,6 @@
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, TableFooter, TablePagination } from "@mui/material"
 import { Product } from "../types/productType"
-import React from "react";
+import { FC } from "react";
 
 type ProductsTableProps = {
     productsList: Product[];
@@ -8,9 +8,17 @@ type ProductsTableProps = {
     totalProducts: number;
     page: number;
     handleChangePage: (event: unknown, newPage: number) => void;
+    selectProduct: (e: unknown) => void;
+    showProduct: (e:unknown) => void;
 }
 
-const ProductsTable: React.FC<ProductsTableProps> = ({productsList, rowsPerPage, totalProducts, page, handleChangePage}) => {
+const ProductsTable: FC<ProductsTableProps> = ({productsList, rowsPerPage, totalProducts, page, handleChangePage, selectProduct, showProduct}) => {
+
+    const handleClick = (product: Product) => {
+        selectProduct(product)
+        showProduct(true)
+    }
+
   return (
     <TableContainer component={Paper}>
         <Table>
@@ -23,7 +31,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({productsList, rowsPerPage,
             </TableHead>
             <TableBody>
                 {productsList.map((product: Product) => (
-                    <TableRow key={product.id} sx={{ bgcolor: product.color }}>
+                    <TableRow key={product.id} sx={{ bgcolor: product.color }} onClick={() => handleClick(product)}>
                         <TableCell component="th" scope="row">{product.id}</TableCell>
                         <TableCell>{product.name}</TableCell>
                         <TableCell>{product.year}</TableCell>

@@ -8,16 +8,25 @@ const theme = createTheme({
   palette: {
     primary: {
       main: '#61dab3'
+    },
+    error: {
+      main: '#f44336'
     }
   },
   typography: {
     h1: {
-      fontSize: "3rem",
+      fontSize: "4rem",
       fontWeight: 600
     },
     h2: {
-      fontSize: "1.75rem",
-      fontWeight: 400
+      fontSize: "3.5rem",
+      fontWeight: 500
+    },
+    h3: {
+      fontSize: "1.75rem"
+    },
+    h4: {
+      fontSize: "1.3rem"
     }
   }
 })
