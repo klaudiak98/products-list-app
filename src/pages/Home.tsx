@@ -1,6 +1,6 @@
 import { TextField, Typography } from "@mui/material"
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react"
-import axios from "axios"
+import axios, { AxiosError } from "axios"
 import { Product } from "../utils/productType"
 import ProductsTable from "../components/ProductsTable"
 import ErrorMessage from "../components/ErrorMessage"
@@ -56,14 +56,18 @@ const Home = () => {
                 setProductsList(response.data.data)
             }
             setError(null)
-        } catch (err) {
-            if (err.response?.data.message) {
-                setError({code: err.response.status, message: err.response.data.message})
-            } else if (err.response.status === 404) {
-                setError({code: err.response.status, message: 'Product not found. Please change parameters.'})
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                const axiosError: AxiosError = error;
+                if (axiosError.response?.status === 404) {
+                    setError({ code: axiosError.response?.status, message: axiosError.response.data.message || 'Not Found. Please change your parameters.' })
+                } else {
+                    setError({ code: axiosError.response?.status, message: axiosError.response.data.message || axiosError.message })
+                }
             } else {
-                setError({code: err.response.status, message: 'Try again later'})
+                setError({code: 500, message: 'Unknown error'})
             }
+            throw error;
         }
         setLoading(false)
     }
