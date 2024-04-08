@@ -1,4 +1,4 @@
-export type ErrorMessageProps = {
+export type ErrorType = {
   code: number,
   message: string
 }

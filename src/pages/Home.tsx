@@ -8,6 +8,7 @@ import ProductDetails from "../components/ProductDetails"
 import { useNavigate, useLocation } from 'react-router-dom';
 import { SelectedProductProvider } from '../context/SelectedProductContext';
 import { ROWS_PER_PAGE } from "../data/tableData"
+import { ErrorType } from "../utils/ErrorType"
 
 const Home = () => {
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ const Home = () => {
     const [productsList, setProductsList] = useState<Product[]>([])
     const [loading, setLoading] = useState<boolean>(false)
     const [page, setPage] = useState<number>(parseInt(pageParam)-1 || 0)
-    const [error, setError] = useState<{code: number, message: string} | null>(null)
+    const [error, setError] = useState<ErrorType | null>(null)
 
     const handleChooseID = (e: ChangeEvent<HTMLInputElement>) => {
         const prodID = Number(e.target.value)
