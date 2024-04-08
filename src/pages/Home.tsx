@@ -7,9 +7,7 @@ import ErrorMessage from "../components/ErrorMessage"
 import ProductDetails from "../components/ProductDetails"
 import { useNavigate, useLocation } from 'react-router-dom';
 import { SelectedProductProvider } from '../context/SelectedProductContext';
-
-const ROWS_PER_PAGE: number = 5
-const TOTAL_PRODUCTS: number = 12
+import { ROWS_PER_PAGE } from "../data/tableData"
 
 const Home = () => {
     const navigate = useNavigate();
@@ -86,8 +84,6 @@ const Home = () => {
             <SelectedProductProvider>
                 <ProductsTable 
                     productsList={productsList} 
-                    rowsPerPage={ROWS_PER_PAGE} 
-                    totalProducts={TOTAL_PRODUCTS} 
                     page={page} 
                     handleChangePage={handleChangePage}
                     loading={loading}/>

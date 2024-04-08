@@ -1,11 +1,11 @@
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, TableFooter, TablePagination, CircularProgress, Box, alpha } from "@mui/material"
 import { Product } from "../utils/productType"
-import { FC } from "react";
 import { ProductsTableProps } from "../utils/productsTablePropsType"
 import { useSelectedProductContext } from '../context/SelectedProductContext';
 import { SelectedProductContextType } from "../utils/selectedProductContextType";
+import { ROWS_PER_PAGE, TOTAL_PRODUCTS } from "../data/tableData"
 
-const ProductsTable: FC<ProductsTableProps> = ({productsList, rowsPerPage, totalProducts, page, handleChangePage, loading}) => {
+const ProductsTable = ({ productsList, page, handleChangePage, loading }: ProductsTableProps) => {
 
     const { setSelectedProduct, setOpenModal } = useSelectedProductContext() as SelectedProductContextType;
 
@@ -55,9 +55,9 @@ const ProductsTable: FC<ProductsTableProps> = ({productsList, rowsPerPage, total
                 <TableRow>
                     { productsList.length > 1 ? 
                         <TablePagination
-                            rowsPerPageOptions={[rowsPerPage]}
-                            count={totalProducts}
-                            rowsPerPage={rowsPerPage}
+                            rowsPerPageOptions={[ROWS_PER_PAGE]}
+                            count={TOTAL_PRODUCTS}
+                            rowsPerPage={ROWS_PER_PAGE}
                             page={page}
                             onPageChange={handleChangePage}
                             />
