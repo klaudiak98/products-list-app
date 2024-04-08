@@ -1,4 +1,3 @@
-import { TextField, Typography } from "@mui/material"
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react"
 import axios, { AxiosError } from "axios"
 import { Product } from "../utils/productType"
@@ -9,6 +8,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { SelectedProductProvider } from '../context/SelectedProductContext';
 import { ROWS_PER_PAGE } from "../data/tableData"
 import { ErrorType } from "../utils/ErrorType"
+import Header from "../components/Header"
+import ProductSelector from "../components/ProductSelector"
 
 const Home = () => {
     const navigate = useNavigate();
@@ -72,13 +73,8 @@ const Home = () => {
 
   return (
     <>
-        <Typography variant='h1' color='primary.main' pt='1em'>Products List</Typography>
-        <TextField 
-            type='number' 
-            label='Choose ID' 
-            value={productID || ''} 
-            onChange={handleChooseID} 
-            inputProps={{min: 1}}/>
+        <Header/>
+        <ProductSelector productId={productID} handleChooseId={handleChooseID}/>
         
         {!error &&  productsList &&
         <>
