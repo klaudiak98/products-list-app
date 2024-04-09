@@ -1,9 +1,10 @@
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, TableFooter, TablePagination, CircularProgress, Box, alpha } from "@mui/material"
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, TableFooter, TablePagination, alpha } from "@mui/material"
 import { Product } from "../utils/productType"
 import { ProductsTableProps } from "../utils/productsTablePropsType"
 import { useSelectedProductContext } from '../context/SelectedProductContext';
 import { SelectedProductContextType } from "../utils/selectedProductContextType";
 import { ROWS_PER_PAGE, TOTAL_PRODUCTS } from "../data/tableData"
+import Loading from "./Loading";
 
 const ProductsTable = ({ productsList, page, handleChangePage, loading }: ProductsTableProps) => {
 
@@ -28,9 +29,7 @@ const ProductsTable = ({ productsList, page, handleChangePage, loading }: Produc
                 { loading && !productsList.length &&
                     <TableRow>
                         <TableCell colSpan={3}>
-                            <Box sx={{height: 200, alignSelf:'center', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                                <CircularProgress size="70px"/>
-                            </Box>
+                            <Loading/>
                         </TableCell>
                     </TableRow>
                 }

@@ -1,7 +1,6 @@
-import { MouseEvent, useEffect, useState } from "react"
+import { MouseEvent, lazy, useEffect, useState, Suspense } from "react"
 import { Product } from "../utils/productType"
 import ProductsTable from "../components/ProductsTable"
-import ErrorMessage from "../components/ErrorMessage"
 import ProductDetails from "../components/ProductDetails"
 import { useNavigate, useLocation } from 'react-router-dom';
 import { SelectedProductProvider } from '../context/SelectedProductContext';
@@ -10,6 +9,9 @@ import Header from "../components/Header"
 import ProductFilter from "../components/ProductFilter"
 import { fetchProductById } from "../utils/fetchProductById"
 import { fetchProductsByPage } from "../utils/fetchProductsByPage"
+import Loading from "../components/Loading";
+
+const ErrorMessage = lazy(() => import('../components/ErrorMessage'))
 
 const Home = () => {
     const navigate = useNavigate();
@@ -63,7 +65,11 @@ const Home = () => {
         </>
         }
 
-        {error && <ErrorMessage code={error.code} message={error.message}/>}
+        {error && 
+            <Suspense fallback={<Loading/>}>
+                <ErrorMessage code={error.code} message={error.message}/>
+            </Suspense>
+        }
     </>
   )
 }
