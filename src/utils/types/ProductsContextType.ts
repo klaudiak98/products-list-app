@@ -1,7 +1,7 @@
-import { Product } from "./productType";
+import { Product } from "./ProductType";
 import { ErrorType } from "./ErrorType";
 
-export type ProductsContextType = {
+export type ProductsContext = {
   productsList: Product[];
   setProductsList: (products: Product[]) => void;
   loading: boolean;

@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useContext, useState } from "react";
-import { Product } from "../utils/productType";
-import { ErrorType } from "../utils/ErrorType";
-import { ProductsContextType } from "../utils/ProductsContextType";
+import { Product } from "../utils/types/ProductType";
+import { ErrorType } from "../utils/types/ErrorType";
+import { ProductsContext as ProductsContextType } from "../utils/types/ProductsContextType";
 
 const ProductsContext = createContext<ProductsContextType>({
     productsList: [],

@@ -1,4 +1,4 @@
-import { Container } from '@mui/material'
+import Container from '@mui/material/Container'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Home from './pages/Home'
 import { ProductsProvider } from './context/ProductsContext'

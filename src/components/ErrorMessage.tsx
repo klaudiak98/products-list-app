@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material"
-import { ErrorType } from "../utils/ErrorType"
+import { ErrorType } from "../utils/types/ErrorType"
 
 const ErrorMessage = ({ code, message }: ErrorType) => {
   return (

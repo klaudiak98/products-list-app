@@ -1,14 +1,13 @@
 import TextField from "@mui/material/TextField"
-import { ChangeEvent } from "react"
-import { Product } from "../utils/productType"
-import { ErrorType } from "../utils/ErrorType"
+import { ChangeEvent, useState } from "react"
+import { Product } from "../utils/types/ProductType"
+import { ErrorType } from "../utils/types/ErrorType"
 import { NavigateFunction, useNavigate } from "react-router-dom"
-import { useState } from "react"
 import { debounce } from "@mui/material"
-import { fetchProductById } from "../utils/fetchProductById"
-import { fetchProductsByPage } from "../utils/fetchProductsByPage"
+import { fetchProductById } from "../utils/functions/fetchProductById"
+import { fetchProductsByPage } from "../utils/functions/fetchProductsByPage"
 import { useProductsContext } from "../context/ProductsContext"
-import { ProductsContextType } from "../utils/ProductsContextType"
+import { ProductsContext } from "../utils/types/ProductsContextType"
 
 const handleFetchProduct = async (
   setLoading: (loading: boolean) => void,
@@ -39,7 +38,7 @@ const ProductFilter = ({
 
   const navigate = useNavigate();
 
-  const { setLoading, setProductsList, setError } = useProductsContext() as ProductsContextType
+  const { setLoading, setProductsList, setError } = useProductsContext() as ProductsContext;
   const [selectedProduct, setSelectedProduct] = useState<number>(productId)
 
   const handleChooseId = (choosenId: number) => {

@@ -1,13 +1,13 @@
 import { lazy, useEffect, useState, Suspense } from "react"
+import { useLocation } from 'react-router-dom';
 import ProductsTable from "../components/ProductsTable"
 import ProductDetails from "../components/ProductDetails"
-import {  useLocation } from 'react-router-dom';
-import { SelectedProductProvider } from '../context/SelectedProductContext';
 import Header from "../components/Header"
 import ProductFilter from "../components/ProductFilter"
-import { fetchProductById } from "../utils/fetchProductById"
-import { fetchProductsByPage } from "../utils/fetchProductsByPage"
 import Loading from "../components/Loading";
+import { fetchProductById } from "../utils/functions/fetchProductById"
+import { fetchProductsByPage } from "../utils/functions/fetchProductsByPage"
+import { SelectedProductProvider } from '../context/SelectedProductContext';
 import { useProductsContext } from "../context/ProductsContext";
 
 const ErrorMessage = lazy(() => import('../components/ErrorMessage'))

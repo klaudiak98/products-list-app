@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from "react";
-import { Product } from "../utils/productType";
-import { SelectedProductContextType } from "../utils/selectedProductContextType";
+import { Product } from "../utils/types/ProductType";
+import { SelectedProductContext as SelectedProductContextType } from "../utils/types/SelectedProductContextType";
 
 const NO_PRODUCT: Product = {
     id: 0,

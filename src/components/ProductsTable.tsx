@@ -1,12 +1,12 @@
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, TableFooter, TablePagination, alpha } from "@mui/material"
-import { Product } from "../utils/productType"
+import { Product } from "../utils/types/ProductType"
 import { useSelectedProductContext } from '../context/SelectedProductContext';
-import { SelectedProductContextType } from "../utils/selectedProductContextType";
+import { SelectedProductContext } from "../utils/types/SelectedProductContextType";
 import { ROWS_PER_PAGE, TOTAL_PRODUCTS } from "../data/tableData"
 import Loading from "./Loading";
 import { useNavigate } from "react-router-dom";
 import { useProductsContext } from "../context/ProductsContext";
-import { ProductsContextType } from "../utils/ProductsContextType";
+import { ProductsContext } from "../utils/types/ProductsContextType";
 import { MouseEvent } from "react";
 
 const ProductsTable = ({ productId, page, setPage } : {
@@ -17,10 +17,9 @@ const ProductsTable = ({ productId, page, setPage } : {
 
     const navigate = useNavigate()
 
-    const { productsList, loading } = useProductsContext() as ProductsContextType;
+    const { productsList, loading } = useProductsContext() as ProductsContext;
 
-    const { setSelectedProduct, setOpenModal } = useSelectedProductContext() as SelectedProductContextType;
-
+    const { setSelectedProduct, setOpenModal } = useSelectedProductContext() as SelectedProductContext;
     const handleClick = (product: Product) => {
         setSelectedProduct(product)
         setOpenModal(true)
