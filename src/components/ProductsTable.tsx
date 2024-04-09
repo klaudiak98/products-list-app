@@ -1,18 +1,37 @@
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, TableFooter, TablePagination, alpha } from "@mui/material"
 import { Product } from "../utils/productType"
-import { ProductsTableProps } from "../utils/productsTablePropsType"
 import { useSelectedProductContext } from '../context/SelectedProductContext';
 import { SelectedProductContextType } from "../utils/selectedProductContextType";
 import { ROWS_PER_PAGE, TOTAL_PRODUCTS } from "../data/tableData"
 import Loading from "./Loading";
+import { useNavigate } from "react-router-dom";
+import { useProductsContext } from "../context/ProductsContext";
+import { ProductsContextType } from "../utils/ProductsContextType";
+import { MouseEvent } from "react";
 
-const ProductsTable = ({ productsList, page, handleChangePage, loading }: ProductsTableProps) => {
+const ProductsTable = ({ productId, page, setPage } : {
+    productId: number,
+    page: number,
+    setPage: (page: number) => void
+}) => {
+
+    const navigate = useNavigate()
+
+    const { productsList, loading } = useProductsContext() as ProductsContextType;
 
     const { setSelectedProduct, setOpenModal } = useSelectedProductContext() as SelectedProductContextType;
 
     const handleClick = (product: Product) => {
         setSelectedProduct(product)
         setOpenModal(true)
+    }
+
+    const handleChangePage = (_e: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        setPage(newPage)
+        
+        productId
+        ? navigate (`?page=${newPage+1}&id=${productId}`)
+        : navigate (`?page=${newPage+1}`)
     }
 
   return (

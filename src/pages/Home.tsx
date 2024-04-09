@@ -1,20 +1,18 @@
-import { MouseEvent, lazy, useEffect, useState, Suspense } from "react"
-import { Product } from "../utils/productType"
+import { lazy, useEffect, useState, Suspense } from "react"
 import ProductsTable from "../components/ProductsTable"
 import ProductDetails from "../components/ProductDetails"
-import { useNavigate, useLocation } from 'react-router-dom';
+import {  useLocation } from 'react-router-dom';
 import { SelectedProductProvider } from '../context/SelectedProductContext';
-import { ErrorType } from "../utils/ErrorType"
 import Header from "../components/Header"
 import ProductFilter from "../components/ProductFilter"
 import { fetchProductById } from "../utils/fetchProductById"
 import { fetchProductsByPage } from "../utils/fetchProductsByPage"
 import Loading from "../components/Loading";
+import { useProductsContext } from "../context/ProductsContext";
 
 const ErrorMessage = lazy(() => import('../components/ErrorMessage'))
 
 const Home = () => {
-    const navigate = useNavigate();
     const location = useLocation();
     const searchParams =  new URLSearchParams(location.search)
     const pageParam: string = searchParams.get('page') || ''
@@ -23,17 +21,7 @@ const Home = () => {
     const productId: number = (parseInt(idParam) || 0)
     const [page, setPage] = useState<number>(parseInt(pageParam)-1 || 0)
 
-    const [productsList, setProductsList] = useState<Product[]>([])
-    const [loading, setLoading] = useState<boolean>(false)
-    const [error, setError] = useState<ErrorType | null>(null)
-
-    const handleChangePage = (_e: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
-        setPage(newPage)
-        
-        productId
-        ? navigate (`?page=${newPage+1}&id=${productId}`)
-        : navigate (`?page=${newPage+1}`)
-    }
+    const { setLoading, productsList, setProductsList, error, setError} = useProductsContext()
 
     useEffect(() => {
         productId
@@ -46,19 +34,15 @@ const Home = () => {
         <Header/>
         <ProductFilter 
             productId={productId} 
-            page={page}
-            setLoading={setLoading}
-            setProductsList={setProductsList}
-            setError={setError}/>
-        
+            page={page}/>
+
         {!error &&  productsList &&
         <>
             <SelectedProductProvider>
                 <ProductsTable 
-                    productsList={productsList} 
+                    productId={productId} 
                     page={page} 
-                    handleChangePage={handleChangePage}
-                    loading={loading}/>
+                    setPage={setPage}/>
 
                 <ProductDetails />
             </SelectedProductProvider>

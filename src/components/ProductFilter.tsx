@@ -7,6 +7,8 @@ import { useState } from "react"
 import { debounce } from "@mui/material"
 import { fetchProductById } from "../utils/fetchProductById"
 import { fetchProductsByPage } from "../utils/fetchProductsByPage"
+import { useProductsContext } from "../context/ProductsContext"
+import { ProductsContextType } from "../utils/ProductsContextType"
 
 const handleFetchProduct = async (
   setLoading: (loading: boolean) => void,
@@ -29,20 +31,15 @@ const debounceFetchingProduct = debounce(handleFetchProduct, 500)
 
 const ProductFilter = ({ 
   productId, 
-  page,
-  setLoading,
-  setProductsList,
-  setError
+  page
 }: {
   productId: number, 
-  page: number,
-  setLoading: (loading: boolean) => void,
-  setProductsList: (products: Product[]) => void,
-  setError: (error: ErrorType | null) => void
+  page: number
 }) => {
 
   const navigate = useNavigate();
 
+  const { setLoading, setProductsList, setError } = useProductsContext() as ProductsContextType
   const [selectedProduct, setSelectedProduct] = useState<number>(productId)
 
   const handleChooseId = (choosenId: number) => {
