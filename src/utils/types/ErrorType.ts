@@ -1,4 +1,4 @@
 export type ErrorType = {
-  code: number;
+  code?: number;
   message: string;
 };

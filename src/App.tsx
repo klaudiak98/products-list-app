@@ -1,7 +1,6 @@
 import Container from '@mui/material/Container'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Home from './pages/Home'
-import { ProductsProvider } from './context/ProductsContext'
 
 function App() {
 
@@ -14,14 +13,12 @@ function App() {
         alignItems: 'center', 
         gap: 3
       }}>
-      <ProductsProvider>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home/>} />
             <Route path="*" element={<Navigate to='/'/>} />
           </Routes>
         </BrowserRouter>
-      </ProductsProvider>
     </Container>
   )
 }

@@ -1,14 +1,16 @@
-import { lazy, useEffect, useState, Suspense } from "react"
+import { lazy, useState, Suspense } from "react"
 import { useLocation } from 'react-router-dom';
 import ProductsTable from "../components/ProductsTable"
 import ProductDetails from "../components/ProductDetails"
 import Header from "../components/Header"
+import { Product } from "../utils/types/ProductType"
 import ProductFilter from "../components/ProductFilter"
 import Loading from "../components/Loading";
-import { fetchProductById } from "../utils/functions/fetchProductById"
-import { fetchProductsByPage } from "../utils/functions/fetchProductsByPage"
 import { SelectedProductProvider } from '../context/SelectedProductContext';
-import { useProductsContext } from "../context/ProductsContext";
+import { useQuery } from "@tanstack/react-query"
+import { AxiosError } from "axios";
+import { fetchProductsByPage } from "../utils/functions/fetchProductsByPage";
+import { fetchProductById } from "../utils/functions/fetchProductById";
 
 const ErrorMessage = lazy(() => import('../components/ErrorMessage'))
 
@@ -21,37 +23,49 @@ const Home = () => {
     const productId: number = (parseInt(idParam) || 0)
     const [page, setPage] = useState<number>(parseInt(pageParam)-1 || 0)
 
-    const { setLoading, productsList, setProductsList, error, setError} = useProductsContext()
+    const { isLoading: productsLoading, error: productsError, data: products } = useQuery<Product[], AxiosError>({
+        queryKey: ['products', {page: page+1}],
+        queryFn: () => fetchProductsByPage(page+1),
+        retry: false,
+    })
 
-    useEffect(() => {
-        productId
-        ? fetchProductById(productId, setProductsList, setError, setLoading)
-        : fetchProductsByPage(page, setProductsList, setError, setLoading)
-    },[page, productId])
+    const { isLoading: productLoading, error: productError, data: product } = useQuery<[Product], AxiosError>({
+        queryKey: ['product', {id: productId}],
+        queryFn: () => fetchProductById(productId),
+        enabled: !!productId,
+        retry: false
+    })
 
-  return (
+    const displayedProducts: Product[] | null = product ? product : (products || null)
+    const error: AxiosError | null = productsError || productError
+    const loading: boolean = productsLoading || productLoading
+
+    return (
     <>
         <Header/>
         <ProductFilter 
             productId={productId} 
             page={page}/>
+   
 
-        {!error &&  productsList &&
+       { !error && 
         <>
             <SelectedProductProvider>
                 <ProductsTable 
                     productId={productId} 
                     page={page} 
-                    setPage={setPage}/>
-
+                    setPage={setPage}
+                    products={displayedProducts}
+                    loading={loading}
+                />
                 <ProductDetails />
             </SelectedProductProvider>
         </>
         }
 
-        {error && 
+        { error &&
             <Suspense fallback={<Loading/>}>
-                <ErrorMessage code={error.code} message={error.message}/>
+                <ErrorMessage code={error.response?.status} message={error.message}/>
             </Suspense>
         }
     </>

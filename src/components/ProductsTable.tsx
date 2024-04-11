@@ -5,21 +5,20 @@ import { SelectedProductContext } from "../utils/types/SelectedProductContextTyp
 import { ROWS_PER_PAGE, TOTAL_PRODUCTS } from "../data/tableData"
 import Loading from "./Loading";
 import { useNavigate } from "react-router-dom";
-import { useProductsContext } from "../context/ProductsContext";
-import { ProductsContext } from "../utils/types/ProductsContextType";
 import { MouseEvent } from "react";
 
-const ProductsTable = ({ productId, page, setPage } : {
+const ProductsTable = ({ productId, page, setPage, products, loading } : {
     productId: number,
     page: number,
-    setPage: (page: number) => void
+    setPage: (page: number) => void,
+    products: Product[] | null,
+    loading: boolean
 }) => {
 
     const navigate = useNavigate()
 
-    const { productsList, loading } = useProductsContext() as ProductsContext;
-
     const { setSelectedProduct, setOpenModal } = useSelectedProductContext() as SelectedProductContext;
+
     const handleClick = (product: Product) => {
         setSelectedProduct(product)
         setOpenModal(true)
@@ -44,14 +43,19 @@ const ProductsTable = ({ productId, page, setPage } : {
                 </TableRow>
             </TableHead>
             <TableBody>
-                { loading && !productsList.length &&
+                { loading &&
                     <TableRow>
                         <TableCell colSpan={3}>
                             <Loading/>
                         </TableCell>
                     </TableRow>
                 }
-                { productsList.map((product: Product) => (
+                { !loading && products && products.length === 0 &&
+                    <TableRow>
+                        <TableCell colSpan={3} sx={{textAlign: 'center'}}><strong>No data. Please change parameters.</strong></TableCell>
+                    </TableRow>
+                }
+                { !loading && products && products.length > 0 && products.map((product: Product) => (
                     <TableRow 
                         key={product.id} 
                         sx={{ 
@@ -70,7 +74,7 @@ const ProductsTable = ({ productId, page, setPage } : {
             </TableBody>
            <TableFooter>
                 <TableRow>
-                    { productsList.length > 1 ? 
+                    { products && !productId ? 
                         <TablePagination
                             rowsPerPageOptions={[ROWS_PER_PAGE]}
                             count={TOTAL_PRODUCTS}
